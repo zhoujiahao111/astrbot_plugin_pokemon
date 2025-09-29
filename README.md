@@ -1,1 +1,3 @@
 开发中...
+
+data/images/pokemon 图片还没完全上传
