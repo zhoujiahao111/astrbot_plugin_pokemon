@@ -1,0 +1,76 @@
+{
+    "default_max_team": {
+        "description": "队伍上限",
+        "type": "int",
+        "hint": "队伍的初始上限, 玩家可购买商店道具, 在此基础上升级上限",
+        "default": 3,
+        "min": 1,
+        "max": 20
+    },
+    "cache_max_timeout": {
+        "description": "缓存超时时长",
+        "type": "int",
+        "hint": "一些指令需要缓存结果, 需要设置等待用户选择的最大时长",
+        "default": 120,
+        "min": 10,
+        "max": 1000
+    },
+    "max_round": {
+        "description": "最大回合数",
+        "type": "int",
+        "hint": "战斗时超出最大回合数会强行判断胜负, 用于控制战斗节奏和返回的信息数量",
+        "default": 80,
+        "min": 20,
+        "max": 1000
+    },
+    "weather_interval": {
+        "description": "天气间隔回合",
+        "type": "int",
+        "hint": "控制对战时天气变化的间隔回合数，设置为0表示天气不会自然变化",
+        "default": 3,
+        "min": 0,
+        "max": 9999
+    },
+    "generate_battlefield": {
+        "description": "是否生成开局的战场图",
+        "type": "bool",
+        "hint": "true：生成开局的战场图, false：不生成开局战场图",
+        "default": false
+    },
+    "send_battlefield_immediately": {
+        "description": "是否立即发送第一张战场图",
+        "type": "bool",
+        "hint": "true：对决开始时单独发送第一张战场图，直观快速但占屏；false：与后续对战信息一起合并转发，省屏但稍慢",
+        "default": false
+    },
+    "generate_mega_dynamax_battlefield": {
+        "description": "是否在宝可梦进行 Mega 或极巨化时生成对应的战场图",
+        "type": "bool",
+        "hint": "true：当宝可梦 Mega/极巨化时单独生成一张战场图；false：不生成此类图片。注意：单场战斗最多可能出现 4 张（双方各 1 次 Mega + 各 1 次极巨化）",
+        "default": false
+    },
+    "initial_money": {
+        "description": "用户领养宝可梦后默认的金钱数额",
+        "type": "int",
+        "hint": "用户领养宝可梦后默认的金钱数额",
+        "default": 300,
+        "min": 0,
+        "max": 10000
+    },
+    "battle_reward_multiplier_modifier": {
+        "description": "对决之后的金钱和经验值奖励的倍率",
+        "type": "int",
+        "hint": "对决之后的金钱和经验值奖励的倍率, 100就是100%, 不变",
+        "default": 100,
+        "min": 10,
+        "max": 1000
+    },
+    "shop_chatlog_item_count": {
+        "description": "商店的聊天记录中，单个聊天记录输出的商品数量",
+        "type": "int",
+        "hint": "商店的聊天记录中，单个聊天记录输出的商品数量",
+        "default": 20,
+        "min": 1,
+        "max": 999
+    }
+}
