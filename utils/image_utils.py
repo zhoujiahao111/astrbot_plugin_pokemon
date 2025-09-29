@@ -64,7 +64,7 @@ def 返回字体路径方法() -> str:
             'data',
             'font'
         ),
-        "default.ttc"
+        "default.ttf"
     )
 
 
