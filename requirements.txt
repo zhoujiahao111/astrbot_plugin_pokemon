@@ -1,0 +1,7 @@
+fuzzywuzzy
+rapidfuzz
+python-Levenshtein
+pypinyin
+aiosqlite
+sqlalchemy>=1.4
+matplotlib
