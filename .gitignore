@@ -3478,3 +3478,6 @@ models/__pycache__/result.cpython-312.pyc
 utils/__pycache__/__init__.cpython-312.pyc
 utils/__pycache__/image_utils.cpython-312.pyc
 utils/__pycache__/text_utils.cpython-312.pyc
+/.idea/dbnavigator.xml
+/.idea/misc.xml
+/.idea/inspectionProfiles/Project_Default.xml
