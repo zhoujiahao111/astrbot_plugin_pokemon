@@ -297,7 +297,7 @@ class 宝可梦插件类(Star):
             else:
                 yield 事件.plain_result("奇怪, 看上去出现了比较严重的错误, 建议联系机器人的管理员")
 
-    # @filter.permission_type(filter.PermissionType.ADMIN)
+    @filter.permission_type(filter.PermissionType.ADMIN)
     @pm.command("强制改名", alias={"宝可梦强制重命名", "宝可梦强制修改名字"})
     @会话初始化
     async def 宝可梦强制改名方法(self, 事件: AstrMessageEvent, 主键ID: int, 新名称: str):
@@ -312,7 +312,7 @@ class 宝可梦插件类(Star):
 
         yield 事件.plain_result(结果.数据信息 if 结果.是否成功 else 结果.错误信息)
 
-    # @filter.permission_type(filter.PermissionType.ADMIN)
+    @filter.permission_type(filter.PermissionType.ADMIN)
     @pm.command("强制添加宝可梦", alias={"宝可梦强制添加", "宝可梦添加", "添加宝可梦"})
     @会话初始化
     async def 强制添加宝可梦方法(self, 事件: AstrMessageEvent, 用户ID: int, 编号: str):
