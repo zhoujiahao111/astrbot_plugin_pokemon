@@ -17,7 +17,6 @@ class 用户表(Base):
     __tablename__ = '用户表'
 
     用户ID = Column(Integer, primary_key=True)
-    群ID = Column(BigInteger, nullable=False, default=0)
     金钱 = Column(Integer, nullable=False, default=0)
     当前队伍ID = Column(Integer, ForeignKey('队伍信息表.队伍ID', ondelete='SET NULL'))
     注册日期 = Column(DateTime, default=datetime.now)

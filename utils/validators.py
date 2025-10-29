@@ -11,12 +11,3 @@ def 验证用户qq方法(用户qq: str):
         return 10001
 
     raise ValueError(f"无效的会话.用户qq格式: {用户qq}")
-
-def 验证qq群方法(群号: str):
-    if isinstance(群号, int):
-        return 群号
-
-    if 群号.isdigit():
-        return int(群号)
-
-    return False

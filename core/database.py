@@ -15,7 +15,7 @@ from ..models import result, increment, enums
 from ..schema.base import Base as 模型基础
 
 数据库路径 = Path(__file__).resolve().parents[3] / 'plugins_db' / 'astrbot_plugin_pokemon.db'
-
+print(f"数据库路径: {数据库路径}")
 
 class 数据库管理器:
     """
@@ -41,7 +41,6 @@ class 数据库管理器:
 
     def 获取数据表方法(self, 表名):
         """
-        【优化二：更健壮的方法】
         根据输入的字符串名称或枚举，返回对应的数据表类。
         """
         if isinstance(表名, enums.表名类):
@@ -55,13 +54,6 @@ class 数据库管理器:
         return model_class
 
     async def 初始化创建数据表方法(self):
-        """
-        【修改三：使用正确的 Base 并优化提示】
-        现在 `模型基础.metadata` 持有了所有已注册模型的信息。
-        """
-        # 为了让 SQLAlchemy 的 Base 能够收集到所有模型，
-        # 必须确保在调用此方法前，所有定义模型的 Python 文件（如 user.py, move.py）都已被导入。
-        # 通常这通过在 `schema` 包的 `__init__.py` 文件中导入所有模型来实现。
         if not 模型基础.metadata.tables:
             print("警告: MetaData 中没有任何数据表被注册！请检查模型是否在 `schema/__init__.py` 中被正确导入。")
             return
@@ -547,8 +539,11 @@ async def 获取数据库对象() -> 数据库管理器:
     如果实例不存在，则创建、异步初始化并返回。
     """
     global _数据库实例
+    print("获取数据库对象...")
+
 
     if _数据库实例 is None:
         _数据库实例 = 数据库管理器()
+        print("初始化数据库表...")
         await _数据库实例.初始化创建数据表方法()
     return _数据库实例

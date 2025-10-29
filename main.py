@@ -61,23 +61,6 @@ def 会话初始化(函数):
 
     return 初始化
 
-def 仅限群聊(func):
-    @wraps(func)
-    async def wrapper(self, 事件: AstrMessageEvent, *args, **kwargs):
-        try:
-            群号 = 事件.get_group_id()
-            if not 群号:
-                raise
-        except:
-            yield 事件.plain_result("抱歉，这个指令只能在群聊中使用哦。")
-            return
-
-        # 有群号, 正常执行原指令
-        async for result in func(self, 事件, *args, **kwargs):
-            yield result
-
-    return wrapper
-
 
 @register("astrbot_plugin_pokemon", "周佳豪", "宝可梦插件, 文字版宝可梦游戏", "1.0.0",
           "https://www.bilibili.com/video/BV16p4y1w7U3/")
@@ -96,6 +79,7 @@ class 宝可梦插件类(Star):
         self.缓存超时时长 = config.get("cache_max_timeout", 120)
 
         asyncio.create_task(self._清理缓存方法())
+        
 
     async def _清理缓存方法(self):
         """
@@ -157,7 +141,6 @@ class 宝可梦插件类(Star):
 
     @pm.command("领养", alias={"领养", "获取", "领养宝可梦"})
     @会话初始化
-    # @仅限群聊 ! 临时代码 ! 用于强制进入群聊环境
     async def 领养宝可梦方法(self, 事件: AstrMessageEvent, 选择: str = None):
         """来领养一只宝可梦吧。"""
         会话: 会话类 = 事件.会话
@@ -484,17 +467,20 @@ class 宝可梦插件类(Star):
             Image.fromBytes(结果.数据信息)
         ])
 
-    @pm.command("使用", alias={"使用物品", "消耗", "激活", "使用道具"})
-    @检查用户注册状态
-    @会话初始化
-    async def 使用物品方法(self, 事件: AstrMessageEvent, 物品名称: str, 数量: int = 1):
-        """查看背包图片"""
+    async def 使用物品方法(self, 事件: AstrMessageEvent, 物品名称: str, 数量或序号: int = 1):
+        """
+        使用背包中的道具。
+        """
         会话: 会话类 = 事件.会话
+
+        if 数量或序号 < 1:
+            yield 事件.plain_result("数量或序号必须是大于0的整数。")
+            return
 
         结果 = await item_repository.执行使用物品方法(
             会话=会话,
             物品名称=物品名称,
-            用户消耗数量=数量
+            数量或序号=数量或序号
         )
 
         yield 事件.plain_result(结果.数据信息 if 结果.是否成功 else 结果.错误信息)

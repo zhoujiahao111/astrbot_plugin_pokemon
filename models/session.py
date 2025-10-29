@@ -14,10 +14,7 @@ class 会话类:
         # self.用户qq = validators.验证用户qq方法(事件.get_sender_id())
         self.用户qq = 10003
         self.用户昵称 = 事件.get_sender_name()
-        self.群ID = validators.验证qq群方法(事件.get_group_id())
-
         self.机器人qq = 事件.get_self_id()
-        # self.群ID = 666 # ! 临时代码 ! 用于强制进入群聊环境
 
         # 配置项
         self.初始最大队伍上限 = 配置.get("default_max_team", 3)
