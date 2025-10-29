@@ -134,10 +134,12 @@ class 宝可梦插件类(Star):
                 except Exception as e:
                     print(f"处理过期项时发生错误: {e}")
 
-    # 采用指令组触发
     @filter.command_group("pm")
-    async def pm(self):
-        pass
+    async def pm(self, event: AstrMessageEvent):
+        yield event.plain_result(f"指令存在。")
+        return
+
+
 
     @pm.command("领养", alias={"领养", "获取", "领养宝可梦"})
     @会话初始化
