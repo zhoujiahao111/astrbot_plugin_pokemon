@@ -8,9 +8,10 @@ from ..core import database
 from ..services import team_services, pokemon_services
 from ..repository import pokemon_repository
 from ..utils import text_utils
-from ..dtos import 道具模型
+from ..dtos import 道具模型, 宝可梦模型
+from ..services import move_services
 
-async def 道具生效方法(会话, 匹配名称: str, 数量或序号: int, 用户现有数量: int) -> result.结果类:
+async def 道具生效方法(会话, 匹配名称: str, 数量或序号: str, 用户现有数量: int) -> result.结果类:
     道具数据模型 = 会话.json管理器.道具.根据名称获取物品(匹配名称)
 
     if not 道具数据模型:
@@ -22,20 +23,57 @@ async def 道具生效方法(会话, 匹配名称: str, 数量或序号: int, �
     if not 道具数据模型.效果列表:
         return result.结果类.失败方法(f"错误! 道具【{道具数据模型.名称}】没有定义任何效果")
 
-    # --- 核心逻辑：判断道具类型，解析'数量或序号'参数 ---
+    # 判断道具类型，解析'数量或序号'参数
     用户消耗数量 = 0
     目标宝可梦ID = None
     是否为进化类道具 = any(效果.效果类型 == 效果类型类.进化 for 效果 in 道具数据模型.效果列表)
 
     if 是否为进化类道具:
         用户消耗数量 = 1  # 进化道具一次只消耗一个
-        解析结果 = await _根据队伍序号获取宝可梦ID(会话, 数量或序号)
+
+        结果 = await team_services.获取用户当前队伍信息方法(会话.用户qq, 是否返回队伍ID=False)
+            
+        if not 结果.是否成功:
+            return 结果.失败方法(结果.错误信息)
+        
+        队伍宝可梦列表 = 结果.数据信息[0]
+        if not 队伍宝可梦列表:
+            return result.结果类.失败方法("你的队伍中没有宝可梦，无法使用进化道具。")
+    
+        目标宝可梦 = None
+            
+        # 尝试将输入作为“序号”处理, 不管昵称是 1-6这种叼毛名称
+        try:
+            序号 = int(数量或序号)
+            if 1 <= 序号 <= len(队伍宝可梦列表):
+                目标宝可梦 = 队伍宝可梦列表[序号 - 1]
+        except ValueError:
+            # 转换成整数失败
+            pass
+    
+        # 如果按序号没有找到，就作为“昵称”处理
+        if 目标宝可梦 is None:
+            for 宝可梦 in 队伍宝可梦列表:
+                if 宝可梦['昵称'] == 数量或序号:
+                    目标宝可梦 = 宝可梦
+                    break  # 找到第一个匹配的昵称
+    
+
+        if 目标宝可梦:
+            解析结果 = result.结果类.成功方法(目标宝可梦['主键ID'])
+        else:
+            解析结果 = result.结果类.失败方法(f"队伍中未找到序号或昵称为 '{数量或序号}' 的宝可梦。")
+
+        队伍宝可梦列表 = 结果.数据信息[0]
+        if not 队伍宝可梦列表:
+            return result.结果类.失败方法("你的队伍中没有宝可梦，无法使用进化道具。")
+        
         if 解析结果.是否成功:
             目标宝可梦ID = 解析结果.数据信息
         else:
             return 解析结果  # 返回获取宝可梦失败的错误信息
     else:
-        用户消耗数量 = 数量或序号 # 对于非进化道具，该参数就是数量
+        用户消耗数量 = int(数量或序号) # 对于非进化道具，该参数就是数量
 
 
     if 用户现有数量 < 用户消耗数量:
@@ -44,6 +82,8 @@ async def 道具生效方法(会话, 匹配名称: str, 数量或序号: int, �
     if 用户消耗数量 > 1 and not 道具数据模型.使用规则.允许多次使用:
         return result.结果类.失败方法(f"【{道具数据模型.名称}】每次只能使用1个。")
     
+    if 用户消耗数量 < 1:
+        return result.结果类.失败方法(f"消耗数量不能小于1哦。")
 
     sql操作列表 = []
     效果文案列表 = []

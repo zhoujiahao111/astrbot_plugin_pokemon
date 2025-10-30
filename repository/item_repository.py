@@ -21,7 +21,7 @@ async def 查询用户物品方法(用户qq: int) -> result.结果类:
 async def 执行使用物品方法(
     会话: 会话类,
     物品名称: str,
-    数量或序号: int  # 修改参数名以符合逻辑
+    数量或序号: str
 ) -> result.结果类:
     用户背包对象 = await bag.背包管理类.create(会话=会话)
 

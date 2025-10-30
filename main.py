@@ -510,15 +510,14 @@ class 宝可梦插件类(Star):
             Image.fromBytes(结果.数据信息)
         ])
 
-    async def 使用物品方法(self, 事件: AstrMessageEvent, 物品名称: str, 数量或序号: int = 1):
+    @pm.command("使用", alias={"使用道具", "道具", "使用物品"})
+    @检查用户注册状态
+    @会话初始化
+    async def 使用物品方法(self, 事件: AstrMessageEvent, 物品名称: str, 数量或序号: str = "1"):
         """
         使用背包中的道具。
         """
         会话: 会话类 = 事件.会话
-
-        if 数量或序号 < 1:
-            yield 事件.plain_result("数量或序号必须是大于0的整数。")
-            return
 
         结果 = await item_repository.执行使用物品方法(
             会话=会话,
