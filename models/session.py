@@ -5,9 +5,6 @@ class 会话类:
     def __init__(self, json管理器: json管理器, 配置, 事件, **初始数据):
         """
         初始化Session对象
-
-        参数:
-            初始数据: 任意键值对，将被转换为类属性
         """
         self.json管理器: json管理器 = json管理器
 

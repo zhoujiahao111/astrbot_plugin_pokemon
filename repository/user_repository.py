@@ -4,16 +4,15 @@ from ..models.enums import 表名类, 操作类
 from ..core import database
 
 
-def 更新用户金钱方法(用户qq: int, 新增金钱: int) -> dict:
+def 更新用户金钱方法(用户qq: int, 修改值: int | increment.增量类) -> dict:
     """
     更新用户金钱的增加操作
-    返回的是适配数据库写入的操作列表，而不是直接执行数据库操作
     """
 
     return {
         "表名": 表名类.用户表,
         "操作": 操作类.更新,
-        "数据": {"金钱": increment.增量类(新增金钱)},
+        "数据": {"金钱": 修改值},
         "条件": {"用户ID": 用户qq}
     }
 

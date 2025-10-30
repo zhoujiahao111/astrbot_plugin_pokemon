@@ -18,12 +18,16 @@ from .services import player_services, bag_services, image_data_services, pokemo
     battle_services
 from .models.session import 会话类
 from .models.enums import 领养阶段类, 缓存类型类
+from .models import increment
 
 def 检查用户注册状态(func):
     @wraps(func)
     async def wrapper(self, 事件: AstrMessageEvent, *args, **kwargs):
 
-        用户qq = validators.验证用户qq方法(事件.get_sender_id())
+        # 用户qq = validators.验证用户qq方法(事件.get_sender_id())
+        用户qq = 10003
+        # ! 临时代码 ! 用于强制修改astrbot 用户为 10003
+
         结果 = await player_services.判断用户是否注册方法(用户qq=用户qq)
 
         if not 结果.数据信息:
@@ -296,6 +300,35 @@ class 宝可梦插件类(Star):
         )
 
         yield 事件.plain_result(结果.数据信息 if 结果.是否成功 else 结果.错误信息)
+
+    @filter.permission_type(filter.PermissionType.ADMIN)
+    @pm.command("修改金钱")
+    @会话初始化
+    async def 修改用户金钱方法(self, 事件: AstrMessageEvent, 用户ID: int, 金额: int):
+        """仅限管理员 金额可为负数"""
+        会话: 会话类 = 事件.会话
+
+        结果 = await user_repository.更新用户金钱方法(
+            用户qq=会话.用户qq,
+            金额=金额
+        )
+
+        yield 事件.plain_result(结果.数据信息 if 结果.是否成功 else 结果.错误信息)
+
+    @filter.permission_type(filter.PermissionType.ADMIN)
+    @pm.command("奖励金钱")
+    @会话初始化
+    async def 奖励用户金钱方法(self, 事件: AstrMessageEvent, 用户ID: int, 金额: int):
+        """仅限管理员 为指定用户添加金钱"""
+        会话: 会话类 = 事件.会话
+
+        结果 = await user_repository.更新用户金钱方法(
+            用户qq=会话.用户qq,
+            金额=increment.增量类(金额)
+        )
+
+        yield 事件.plain_result(结果.数据信息 if 结果.是否成功 else 结果.错误信息)
+
 
     @filter.permission_type(filter.PermissionType.ADMIN)
     @pm.command("强制添加宝可梦", alias={"宝可梦强制添加", "宝可梦添加", "添加宝可梦"})

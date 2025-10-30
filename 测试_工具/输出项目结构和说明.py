@@ -1,7 +1,7 @@
 import os
 import ast
 from typing import Dict, List, Tuple
-
+from pathlib import Path
 
 def logical_lines(path: str) -> int:
     """统计文件有效代码行数（除去空行与 # 注释）"""
@@ -74,8 +74,9 @@ def print_results(results: Dict[str, Dict[str, any]]):
 
 
 # -------------------- 用户配置 --------------------
-PROJECT_PATH = r"C:\file\ruanjian\qq机器人\AstrBot\data\plugins\astrbot_plugin_pokemon"
-SKIP_FOLDERS = {"备份", "测试_工具", "说明文档"}
+PROJECT_PATH = Path(__file__).resolve().parents[3] / 'plugins' / 'astrbot_plugin_pokemon'
+
+SKIP_FOLDERS = {"备份", "测试_工具", "说明文档", ".idea", ".venv", "__pycache__", "旧代码"}
 是否显示所有文件 = True      # True = 列出全部 .py；False = 仅前 3 个
 # 是否显示所有文件 = False
 是否输出doc = True      # True = 打印 docstring；False = 不打印
