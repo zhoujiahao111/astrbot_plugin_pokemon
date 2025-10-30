@@ -18,7 +18,7 @@ async def 战斗奖励发放方法(会话: 会话类, 当前队伍ID: int, 奖�
     # 处理金钱奖励
     获得的金钱 = 奖励字典.get("金钱", 0)
     if 获得的金钱 > 0:
-        操作列表.append(user_repository.更新用户金钱方法(会话.用户qq, increment.增量类(获得的金钱)))
+        操作列表.append(await user_repository.更新用户金钱方法(会话.用户qq, increment.增量类(获得的金钱)))
         金钱变量字典 = {"金钱": 获得的金钱}
         文案列表.append(会话.json管理器.随机文案.获取随机文案("获得金钱", 金钱变量字典))
 

@@ -2,19 +2,24 @@
 from ..models import increment
 from ..models.enums import 表名类, 操作类
 from ..core import database
+from ..models import result
 
-
-def 更新用户金钱方法(用户qq: int, 修改值: int | increment.增量类) -> dict:
+async def 更新用户金钱方法(用户qq: int, 修改值: int | increment.增量类, 立刻执行: bool = False) -> dict | result.结果类:
     """
     更新用户金钱的增加操作
     """
-
-    return {
+    操作字典 = {
         "表名": 表名类.用户表,
         "操作": 操作类.更新,
         "数据": {"金钱": 修改值},
         "条件": {"用户ID": 用户qq}
     }
+
+    if 立刻执行:
+        db = await database.获取数据库对象()
+        return await db.写入方法([操作字典])
+    
+    return 操作字典
 
 
 async def 获取用户宝可梦总数方法(会话) -> int:

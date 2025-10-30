@@ -310,10 +310,14 @@ class 宝可梦插件类(Star):
 
         结果 = await user_repository.更新用户金钱方法(
             用户qq=会话.用户qq,
-            金额=金额
+            修改值=金额,
+            立刻执行=True
         )
 
-        yield 事件.plain_result(结果.数据信息 if 结果.是否成功 else 结果.错误信息)
+        if 结果.是否成功:
+            yield 事件.plain_result(f"管理员大人，已成功为用户 {用户ID} {'增加' if 金额 >= 0 else '减少'} {abs(金额)} 元！")
+        else:
+            yield 事件.plain_result("唉呀，金币修改没有成功呢～")
 
     @filter.permission_type(filter.PermissionType.ADMIN)
     @pm.command("奖励金钱")
@@ -324,10 +328,14 @@ class 宝可梦插件类(Star):
 
         结果 = await user_repository.更新用户金钱方法(
             用户qq=会话.用户qq,
-            金额=increment.增量类(金额)
+            修改值=increment.增量类(金额),
+            立刻执行=True
         )
-
-        yield 事件.plain_result(结果.数据信息 if 结果.是否成功 else 结果.错误信息)
+        print(1111)
+        if 结果.是否成功:
+            yield 事件.plain_result(f"管理员大人，已成功为用户 {用户ID} 发放奖励，增加了 {金额} 元！")
+        else:
+            yield 事件.plain_result("唉呀，奖励发放失败了！")
 
 
     @filter.permission_type(filter.PermissionType.ADMIN)
