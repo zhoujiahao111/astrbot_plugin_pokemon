@@ -15,7 +15,7 @@ from ..models import result, increment, enums
 from ..schema.base import Base as 模型基础
 
 数据库路径 = Path(__file__).resolve().parents[3] / 'plugins_db' / 'astrbot_plugin_pokemon.db'
-print(f"数据库路径: {数据库路径}")
+
 
 class 数据库管理器:
     """
@@ -54,12 +54,17 @@ class 数据库管理器:
         return model_class
 
     async def 初始化创建数据表方法(self):
+        目录路径 = 数据库路径.parent
+        if not 目录路径.exists():
+            目录路径.mkdir(parents=True, exist_ok=True)
+
         if not 模型基础.metadata.tables:
             print("警告: MetaData 中没有任何数据表被注册！请检查模型是否在 `schema/__init__.py` 中被正确导入。")
             return
 
         async with self.引擎.begin() as conn:
             await conn.run_sync(模型基础.metadata.create_all)
+
 
     @asynccontextmanager
     async def _获取会话(self):
@@ -538,8 +543,9 @@ async def 获取数据库对象() -> 数据库管理器:
     获取数据库管理器的单例。
     如果实例不存在，则创建、异步初始化并返回。
     """
-    global _数据库实例
     print("获取数据库对象...")
+    global _数据库实例
+    print(1)
 
 
     if _数据库实例 is None:
